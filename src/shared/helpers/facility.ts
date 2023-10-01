@@ -3,13 +3,13 @@ import {Facilities} from '../types/facilities.type.js';
 const isFacility = (value: unknown): value is Facilities =>
   typeof value === 'string'
   && [
-    'Breakfast',
-    'Air conditioning',
-    'Laptop friendly workspace',
-    'Baby seat',
-    'Washer',
-    'Towels',
-    'Fridge',
+    Facilities.Breakfast,
+    Facilities.AirConditioning,
+    Facilities.LaptopFriendlyWorkspace,
+    Facilities.BabySeat,
+    Facilities.Washer,
+    Facilities.Towels,
+    Facilities.Fridge,
     ''
   ].includes(value);
 
@@ -20,9 +20,4 @@ const getFacility = (value: unknown): Facilities => {
   return value;
 };
 
-export const parseFacilities = (value: unknown): Facilities[] => {
-  if (typeof value !== 'string') {
-    throw new Error(`Can't parse facility ${value}`);
-  }
-  return value.split(';').map(getFacility);
-};
+export const parseFacilities = (value: string): Facilities[] => value.split(';').map(getFacility);
