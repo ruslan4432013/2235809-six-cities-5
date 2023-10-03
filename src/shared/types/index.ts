@@ -4,3 +4,4 @@ export * from './house-type.enum.js';
 export * from './house-offer.type.js';
 export * from './user.type.js';
 export * from './user-type.enum.js';
+export * from './component.enum.js';
