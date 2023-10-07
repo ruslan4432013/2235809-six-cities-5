@@ -1,11 +1,14 @@
-import {Command} from './command.interface.js';
+import { Command } from './command.interface.js';
 import chalk from 'chalk';
 
 
 const paintCommand = (cmd: string) => chalk.blue.bold(cmd);
+const $yellow = (cmd: string) => chalk.yellow(cmd);
+const $green = (cmd: string) => chalk.green(cmd);
+const $red = (cmd: string) => chalk.red(cmd);
 
-const importCmdText = `${paintCommand('--import')} ${chalk.green('<path>')}`;
-const generateCmdText = `${paintCommand('--generate')} ${chalk.yellow('<n>')} ${chalk.green('<path>')} ${chalk.red('<url>')}`;
+const importCmdText = `${paintCommand('--import')} ${$red('<path>')} ${$green('<login>')} ${$yellow('<password>')} ${$green('<host>')} ${$yellow('dbname')} ${$red('salt')}`;
+const generateCmdText = `${paintCommand('--generate')} ${$yellow('<n>')} ${$green('<path>')} ${$red('<url>')}`;
 
 export class HelpCommand implements Command {
 
@@ -19,10 +22,10 @@ export class HelpCommand implements Command {
         Пример:
             cli --<command> [--arguments]
         Команды:
-            ${paintCommand('--version')}:                                         # выводит номер версии
-            ${paintCommand('--help')}:                                            # печатает этот текст
-            ${importCmdText}:                                   # импортирует данные из TSV
-            ${generateCmdText}:                       # генерирует произвольное количество тестовых данных
+            ${paintCommand('--version')}:                                                     # выводит номер версии
+            ${paintCommand('--help')}:                                                        # печатает этот текст
+            ${importCmdText}:         # импортирует данные из TSV в MongoDB
+            ${generateCmdText}:                                   # генерирует произвольное количество тестовых данных
     `);
   }
 }
