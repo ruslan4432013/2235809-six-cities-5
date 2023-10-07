@@ -10,5 +10,5 @@ export const parseUser = (value: unknown): User => {
   }
   console.log({divided});
   const [name, email, avatar, password, userTypeRaw] = divided;
-  return ({name, email, avatar, password, userType: getUserType(userTypeRaw)});
+  return ({name, email, avatar, password, type: getUserType(userTypeRaw)});
 };
