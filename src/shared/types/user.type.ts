@@ -5,6 +5,6 @@ export type User = {
   email: string
   avatar: string
   password: string
-  userType: UserType
+  type: UserType
 }
 

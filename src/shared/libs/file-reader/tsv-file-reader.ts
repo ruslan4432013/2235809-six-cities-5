@@ -1,5 +1,5 @@
-import {FileReader} from './file-reader.interface.js';
-import {createReadStream} from 'node:fs';
+import { FileReader } from './file-reader.interface.js';
+import { createReadStream } from 'node:fs';
 import EventEmitter from 'node:events';
 
 const CHUNK_SIZE = 16384;
@@ -28,7 +28,9 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         const completeRow = remainingData.slice(0, nextLinePosition + 1);
         remainingData = remainingData.slice(++nextLinePosition);
         importedRowCount++;
-        this.emit('line', completeRow);
+        await new Promise((resolve) => {
+          this.emit('line', completeRow, resolve);
+        });
       }
     }
 
