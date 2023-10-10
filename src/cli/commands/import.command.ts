@@ -65,6 +65,7 @@ export class ImportCommand implements Command {
 
   private onCompleteImport(count: number) {
     console.info(`${count} rows imported.`);
+    this.databaseClient.disconnect();
   }
 
   public async execute(filename: string, login: string, password: string, host: string, dbname: string, salt: string): Promise<void> {

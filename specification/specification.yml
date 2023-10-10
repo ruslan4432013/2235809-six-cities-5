@@ -1,0 +1,652 @@
+openapi: 3.1.0
+info:
+  title: API сервер для проекта «Шесть городов».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Шесть городов».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 2.0.0
+tags:
+  - name: offers
+    description: Действия с предложениями по аренде.
+  - name: comments
+    description: Действия с комментариями.
+  - name: users
+    description: Действия с пользователем.
+paths:
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: Список предложений
+      description: Возвращает список предложений по аренде.
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          description: Количество предложений для отображения (по умолчанию 60).
+          schema:
+            type: integer
+            minimum: 1
+            default: 60
+            example: 60
+
+      responses:
+        "200":
+          description: Список предложений успешно получен.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offer'
+        "400":
+          description: Некорректные параметры запроса.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    post:
+      tags:
+        - offers
+      summary: Создание нового предложения
+      description: Создает новое предложение по аренде.
+      requestBody:
+        description: Информация для создания нового предложения.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offer'
+        required: true
+
+      responses:
+        "201":
+          description: Предложение успешно создано. Объект предложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        "400":
+          description: Некорректные данные для создания предложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "401":
+          description: Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: Недостаточно прав для создания предложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /offers/{offerId}:
+    delete:
+      summary: Удаление предложения
+      tags:
+        - offers
+      parameters:
+        - in: path
+          name: offerId
+          required: true
+          description: Идентификатор удаляемого предложения.
+          schema:
+            type: string
+            format: uuid
+            example: 6329c3d6a04ab1061c6425ea
+      responses:
+        "204":
+          description: Предложение успешно удалено.
+        "401":
+          description: Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: Недостаточно прав для удаления предложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: Предложение не найдено.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+    put:
+      tags:
+        - offers
+      summary: Редактирование предложения
+      description: Редактирует существующее предложение по аренде.
+      parameters:
+        - in: path
+          name: offerId
+          required: true
+          description: Идентификатор редактируемого предложения.
+          schema:
+            type: string
+            format: uuid
+            example: 6329c3d6a04ab1061c6425ea  # Замените на реальный идентификатор
+      requestBody:
+        description: Обновленная информация по предложению.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateOffer'
+        required: true
+
+      responses:
+        "200":
+          description: Предложение успешно обновлено. Обновленный объект предложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        "400":
+          description: Некорректные данные для редактирования предложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "401":
+          description: Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: Недостаточно прав для редактирования предложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: Предложение не найдено.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+    get:
+      tags:
+        - offers
+      summary: Детальная информация по предложению
+      description: Возвращает детальную информацию по одному предложению по аренде.
+      parameters:
+        - in: path
+          name: offerId
+          required: true
+          description: Идентификатор предложения.
+          schema:
+            type: string
+            format: uuid
+            example: 6329c3d6a04ab1061c6425ea  # Замените на реальный идентификатор
+
+      responses:
+        "200":
+          description: Детальная информация по предложению успешно получена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        "404":
+          description: Предложение не найдено.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /offers/{offerId}/comments:
+    get:
+      tags:
+        - comments
+      summary: Список комментариев для предложения
+      description: Возвращает список комментариев для определенного предложения.
+      parameters:
+        - in: path
+          name: offerId
+          required: true
+          description: Идентификатор предложения.
+          schema:
+            type: string
+            format: uuid
+            example: 6329c3d6a04ab1061c6425ea  # Замените на реальный идентификатор
+        - in: query
+          name: limit
+          required: false
+          description: Список комментариев для предложения (по умолчанию 50).
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 50
+            example: 50
+      responses:
+        "200":
+          description: Список комментариев успешно получен.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/comment'
+        "404":
+          description: Предложение не найдено.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+    post:
+      tags:
+        - comments
+      summary: Добавление комментария к предложению
+      description: Добавляет новый комментарий к определенному предложению по аренде.
+      parameters:
+        - in: path
+          name: offerId
+          required: true
+          description: Идентификатор предложения, к которому добавляется комментарий.
+          schema:
+            type: string
+            format: uuid
+            example: 6329c3d6a04ab1061c6425ea  # Замените на реальный идентификатор
+
+      requestBody:
+        description: Информация для создания комментария.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createComment'
+        required: true
+
+      responses:
+        "201":
+          description: Комментарий успешно создан. Объект комментария.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment'
+
+        "400":
+          description: Некорректные данные для создания комментария.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "401":
+          description: Пользователь не авторизован.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "403":
+          description: Недостаточно прав для создания комментария.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: Предложение не найдено.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Регистрация пользователя
+      description: Регистрирует нового пользователя.
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+
+      responses:
+        "201":
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        "409":
+          description: Пользователь с таким email уже существует.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /users/verify-auth-status:
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя
+      description: Проверяет, авторизован ли текущий клиент на основе сессионного токена.
+      responses:
+        "200":
+          description: Клиент авторизован. Возвращает информацию о пользователе.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        "401":
+          description: Клиент не авторизован. Необходимо войти в систему
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Авторизация пользователя
+      description: Авторизует пользователя на основе логина и пароля.
+      requestBody:
+        description: Учетные данные пользователя для авторизации.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: keks@htmlacademy.ru
+                password:
+                  type: string
+                  example: 123456
+              required:
+                - email
+                - password
+        required: true
+
+      responses:
+        "200":
+          description: Пользователь успешно авторизован. Возвращает информацию о пользователе.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        "401":
+          description: Не удалось авторизовать пользователя. Неверный логин или пароль.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: Пользователь с таким email не найден.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /users/{userId}/avatar:
+    post:
+      tags:
+        - users
+      summary: Загрузить изображение аватара
+      description: Загружает изображение аватара пользователя. Изображение аватара должно быть в формате `png` или `jpg`.
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: Идентификатор пользователя, чей аватар загружается.
+          schema:
+            type: string
+            format: uuid
+            example: 6329c3d6a04ab1061c6425ea  # Замените на реальный идентификатор
+
+      requestBody:
+        description: Изображение аватара пользователя.
+        content:
+          image/png:
+            schema:
+              type: string
+              format: binary
+          image/jpeg:
+            schema:
+              type: string
+              format: binary
+        required: true
+
+      responses:
+        "201":
+          description: Аватар успешно загружен. Путь к изображению.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    format: uri
+                    example: https://example.com/avatar/user123.jpg
+
+        "400":
+          description: Некорректный формат изображения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: Пользователь не найден.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "500":
+          description: Ошибка сервера при загрузке изображения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+components:
+  schemas:
+    createUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+
+        name:
+          type: string
+          example: Keks777
+
+        password:
+          type: string
+          example: 123456
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+        name:
+          type: string
+          example: SuperKeks
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+
+    coords:
+      type: object
+      properties:
+        latitude:
+          type: string
+          description: Широта
+        longitude:
+          type: string
+          description: Долгота
+
+    updateOffer:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Название предложения.
+        description:
+          type: string
+          description: Описание предложения.
+        postDate:
+          type: string
+          format: date-time
+          description: Дата публикации предложения в формате ISO 8601.
+        city:
+          type: string
+          description: Город, в котором находится предложение.
+        preview:
+          type: string
+          description: Превью изображения предложения.
+        images:
+          type: array
+          items:
+            type: string
+          description: Список изображений предложения.
+        isPremium:
+          type: boolean
+          description: Флаг "Премиум" для предложения.
+        isFavorites:
+          type: boolean
+          description: Флаг "Избранное" для предложения.
+        rating:
+          type: number
+          description: Рейтинг предложения.
+        houseType:
+          type: string
+          description: Тип жилья.
+        roomsCount:
+          type: integer
+          description: Количество комнат в жилье.
+        guestsCount:
+          type: integer
+          description: Максимальное количество гостей.
+        commentsCount:
+          type: integer
+          description: Количество комментариев к предложению.
+        rentPrice:
+          type: number
+          description: Стоимость аренды.
+        facilities:
+          type: array
+          items:
+            type: string
+          description: Список удобств.
+
+    offer:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Название предложения.
+        description:
+          type: string
+          description: Описание предложения.
+        postDate:
+          type: string
+          format: date-time
+          description: Дата публикации предложения в формате ISO 8601.
+        city:
+          type: string
+          description: Город, в котором находится предложение.
+        preview:
+          type: string
+          description: Превью изображения предложения.
+        images:
+          type: array
+          items:
+            type: string
+          description: Список изображений предложения.
+        isPremium:
+          type: boolean
+          description: Флаг "Премиум" для предложения.
+        isFavorites:
+          type: boolean
+          description: Флаг "Избранное" для предложения.
+        rating:
+          type: number
+          description: Рейтинг предложения.
+        houseType:
+          type: string
+          description: Тип жилья.
+        roomsCount:
+          type: integer
+          description: Количество комнат в жилье.
+        guestsCount:
+          type: integer
+          description: Максимальное количество гостей.
+        commentsCount:
+          type: integer
+          description: Количество комментариев к предложению.
+        rentPrice:
+          type: number
+          description: Стоимость аренды.
+        facilities:
+          type: array
+          items:
+            type: string
+          description: Список удобств.
+        author:
+          $ref: '#/components/schemas/user'
+        coords:
+          $ref: '#/components/schemas/coords'
+
+    createComment:
+      type: object
+      properties:
+        rating:
+          type: integer
+          description: Рейтинг комментария. Обязательное поле. Число от 1 до 5.
+        text:
+          type: string
+          description: Текст комментария. Обязательное поле. Минимальная длина 5 символов, максимальная длина 1024 символа.
+    comment:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Текст комментария. Обязательное поле. Минимальная длина 5 символов, максимальная длина 1024 символа.
+        postDate:
+          type: string
+          format: date-time
+          description: Дата публикации комментария. Обязательное поле при получении комментария.
+        rating:
+          type: integer
+          description: Рейтинг комментария. Обязательное поле. Число от 1 до 5.
+        author:
+          $ref: '#/components/schemas/user'
+      required:
+        - text
+        - rating
+        - author
+        - postDate
+
+    error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Текст ошибки
+      required: true
