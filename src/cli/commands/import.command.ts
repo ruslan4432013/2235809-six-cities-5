@@ -42,21 +42,21 @@ export class ImportCommand implements Command {
       ...offer.author,
       password: DEFAULT_USER_PASSWORD,
     }, this.salt);
+    if (offer.facilities.length === 0) {
+      return;
+    }
     await this.offerService.create({
       title: offer.title,
       authorId: user.id,
       city: offer.city,
       coords: offer.coords,
-      commentsCount: offer.commentsCount,
       description: offer.description,
       facilities: offer.facilities,
       guestsCount: offer.guestsCount,
       images: offer.images,
       houseType: offer.houseType,
-      isFavorites: offer.isFavorites,
       isPremium: offer.isPremium,
       preview: offer.preview,
-      rating: offer.rating,
       postDate: offer.postDate,
       rentPrice: offer.rentPrice,
       roomsCount: offer.roomsCount,
