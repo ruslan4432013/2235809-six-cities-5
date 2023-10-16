@@ -1,14 +1,21 @@
-import { getModelForClass, prop, modelOptions, defaultClasses } from '@typegoose/typegoose';
+import { defaultClasses, getModelForClass, modelOptions, prop, Ref, Severity } from '@typegoose/typegoose';
 import { User, UserType } from '../../types/index.js';
 import { createSHA256 } from '../../helpers/index.js';
+import { OfferEntity } from '../offer/index.js';
 
+
+export interface UserEntity extends defaultClasses.Base {
+}
 
 @modelOptions({
   schemaOptions: {
     collection: 'users'
+  },
+  options: {
+    allowMixed: Severity.ALLOW,
   }
 })
-export class UserEntity extends defaultClasses.TimeStamps implements User, defaultClasses.Base {
+export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({ required: true, unique: true })
   public email: string;
 
@@ -28,8 +35,11 @@ export class UserEntity extends defaultClasses.TimeStamps implements User, defau
   })
   public type: UserType;
 
-  _id: defaultClasses.Base['_id'];
-  id: string;
+  @prop({
+    ref: 'OfferEntity',
+    default: [],
+  })
+  public favoriteOffers: Ref<OfferEntity>[];
 
   constructor(userData: User) {
     super();
