@@ -1,17 +1,19 @@
-import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@typegoose/typegoose';
+import { defaultClasses, getModelForClass, modelOptions, prop, Ref, Severity } from '@typegoose/typegoose';
 import { Coords, HouseType } from '../../types/index.js';
-import type { Types } from 'mongoose';
 import { Facilities } from '../../types/facilities.type.js';
 import { UserEntity } from '../user/index.js';
+
+export interface OfferEntity extends defaultClasses.Base {}
 
 @modelOptions({
   schemaOptions: {
     collection: 'offers'
-  }
+  },
+  options: {
+    allowMixed: Severity.ALLOW,
+  },
 })
-export class OfferEntity extends defaultClasses.TimeStamps implements defaultClasses.Base {
-  _id: Types.ObjectId;
-  id: string;
+export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ trim: true, required: true })
   public title: string;
 
@@ -27,16 +29,16 @@ export class OfferEntity extends defaultClasses.TimeStamps implements defaultCla
   @prop()
   public city: string;
 
-  @prop({ ref: UserEntity, required: true })
+  @prop({ ref: () => UserEntity, required: true })
   public authorId: Ref<UserEntity>;
-
-  @prop({ default: 0 })
-  public commentsCount: number;
 
   @prop({ required: true })
   public coords: Coords;
 
-  @prop({ default: [] })
+  @prop({
+    enum: Facilities,
+    type: () => String
+  })
   public facilities: Facilities[];
 
   @prop({ default: 0 })
@@ -49,16 +51,10 @@ export class OfferEntity extends defaultClasses.TimeStamps implements defaultCla
   public houseType: HouseType;
 
   @prop()
-  public isFavorites: boolean;
-
-  @prop()
   public isPremium: boolean;
 
   @prop()
   public postDate: Date;
-
-  @prop()
-  public rating: number;
 
   @prop()
   public rentPrice: number;
