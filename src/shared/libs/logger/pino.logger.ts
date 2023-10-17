@@ -1,8 +1,8 @@
-import {Logger as PinoInstance, pino, transport} from 'pino';
-import {Logger} from './logger.interface.js';
-import {injectable} from 'inversify';
-import {getCurrentModuleDirectoryPath} from '../../helpers/index.js';
-import {resolve} from 'node:path';
+import { Logger as PinoInstance, pino, transport } from 'pino';
+import { Logger } from './logger.interface.js';
+import { injectable } from 'inversify';
+import { getCurrentModuleDirectoryPath } from '../../helpers/index.js';
+import { resolve } from 'node:path';
 
 @injectable()
 export class PinoLogger implements Logger {
@@ -16,7 +16,7 @@ export class PinoLogger implements Logger {
       targets: [
         {
           target: 'pino/file',
-          options: {destination},
+          options: { destination },
           level: 'debug'
         },
         {
@@ -29,19 +29,19 @@ export class PinoLogger implements Logger {
     this.logger = pino({}, multiTransport);
   }
 
-  info(message: string, ...args: unknown[]): void {
+  public info(message: string, ...args: unknown[]): void {
     this.logger.info(message, ...args);
   }
 
-  warn(message: string, ...args: unknown[]): void {
+  public warn(message: string, ...args: unknown[]): void {
     this.logger.warn(message, ...args);
   }
 
-  error(message: string, error: Error, ...args: unknown[]): void {
+  public error(message: string, error: Error, ...args: unknown[]): void {
     this.logger.error(error, message, ...args);
   }
 
-  debug(message: string, ...args: unknown[]): void {
+  public debug(message: string, ...args: unknown[]): void {
     this.logger.debug(message, ...args);
   }
 

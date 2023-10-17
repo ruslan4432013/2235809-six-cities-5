@@ -12,12 +12,9 @@ export type HouseOffer = {
   preview: string
   images: string[]
   isPremium: boolean
-  isFavorites: boolean
-  rating: number
   houseType: HouseType
   roomsCount: number
   guestsCount: number
-  commentsCount: number
   rentPrice: number
   facilities: Facilities[]
   author: User
