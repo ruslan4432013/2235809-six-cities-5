@@ -2,6 +2,7 @@ import { defaultClasses, getModelForClass, modelOptions, prop, Ref, Severity } f
 import { User, UserType } from '../../types/index.js';
 import { createSHA256 } from '../../helpers/index.js';
 import { OfferEntity } from '../offer/index.js';
+import { DEFAULT_AVATAR } from './user.constant.js';
 
 
 export interface UserEntity extends defaultClasses.Base {
@@ -19,8 +20,8 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({ required: true, unique: true })
   public email: string;
 
-  @prop({ required: false, default: '' })
-  public avatar: string;
+  @prop({ required: false, default: DEFAULT_AVATAR })
+  public avatarPath: string;
 
   @prop({ required: true, default: '' })
   public name: string;
@@ -46,7 +47,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     this.email = userData.email;
     this.type = userData.type;
     this.name = userData.name;
-    this.avatar = userData.avatar;
+    this.avatarPath = userData.avatarPath;
   }
 
   public setPassword(password: string, salt: string) {

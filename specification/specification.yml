@@ -608,8 +608,11 @@ components:
           items:
             type: string
           description: Список удобств.
-        author:
-          $ref: '#/components/schemas/user'
+        authorId:
+          type: string
+          example:
+            65354ea5eca0ad11e555074f
+          description: ID автора
         coords:
           $ref: '#/components/schemas/coords'
 

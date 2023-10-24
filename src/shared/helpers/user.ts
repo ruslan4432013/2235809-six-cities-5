@@ -8,7 +8,6 @@ export const parseUser = (value: unknown): User => {
   if (divided.length !== 5) {
     throw new Error(`Incorrect User ${value}`);
   }
-  console.log({divided});
-  const [name, email, avatar, password, userTypeRaw] = divided;
-  return ({name, email, avatar, password, type: getUserType(userTypeRaw)});
+  const [name, email, avatarPath, password, userTypeRaw] = divided;
+  return ({name, email, avatarPath, password, type: getUserType(userTypeRaw)});
 };
