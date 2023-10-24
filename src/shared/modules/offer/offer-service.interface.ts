@@ -13,6 +13,8 @@ export interface OfferService {
 
   findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
 
+  findByTitle(title: string): Promise<DocumentType<OfferEntity> | null>;
+
   find(options?: OfferFindOptions): Promise<DocumentType<OfferEntity>[]>;
 
   deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
