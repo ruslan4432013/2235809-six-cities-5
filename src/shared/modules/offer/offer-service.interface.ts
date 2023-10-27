@@ -23,7 +23,5 @@ export interface OfferService {
 
   findPremium(): Promise<DocumentType<OfferEntity>[]>;
 
-  findFavoritesByUserId(userId: string): Promise<DocumentType<OfferEntity>[]>;
-
   exists(documentId: string): Promise<boolean>;
 }
