@@ -1,5 +1,6 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { Coords } from '../../../types/index.js';
+import { UserRdo } from '../../user/rdo/user.rdo.js';
 
 export class OfferRdo {
   @Expose()
@@ -50,8 +51,9 @@ export class OfferRdo {
   @Expose()
   public facilities: string[];
 
-  @Expose()
-  public authorId: string;
+  @Expose({name: 'authorId'})
+  @Type(() => UserRdo)
+  public author: UserRdo;
 
   @Expose()
   public coords: Coords;
