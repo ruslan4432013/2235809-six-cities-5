@@ -2,13 +2,14 @@ import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { DocumentType } from '@typegoose/typegoose';
 import { OfferEntity } from './offer.entity.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
+import { DocumentExists } from '../../types/document-exists.interface.js';
 
 export type OfferFindOptions = {
   userId?: string,
   limit?: number
 }
 
-export interface OfferService {
+export interface OfferService extends DocumentExists {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
 
   findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
@@ -21,9 +22,7 @@ export interface OfferService {
 
   updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
 
-  findPremium(): Promise<DocumentType<OfferEntity>[]>;
+  findPremium(limit?: number): Promise<DocumentType<OfferEntity>[]>;
 
-  findFavoritesByUserId(userId: string): Promise<DocumentType<OfferEntity>[]>;
-
-  exists(documentId: string): Promise<boolean>;
+  findFavorite(userId: string, limit?: number): Promise<DocumentType<OfferEntity>[]>;
 }
