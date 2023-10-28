@@ -8,6 +8,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import mongoose, { PipelineStage } from 'mongoose';
 import { DEFAULT_OFFER_COUNT } from './offer.constant.js';
+import { UserEntity } from '../user/index.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
@@ -15,13 +16,14 @@ export class DefaultOfferService implements OfferService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>,
+    @inject(Component.UserModel) private readonly userModel: types.ModelType<UserEntity>,
   ) {
   }
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
     const result = await this.offerModel.create(dto);
     this.logger.info(`New offer created: ${dto.title}`);
-    return result;
+    return result.populate(['authorId']);
   }
 
   public findByTitle(title: string): Promise<DocumentType<OfferEntity> | null> {
@@ -63,7 +65,7 @@ export class DefaultOfferService implements OfferService {
             },
             {
               $project: {
-                favoriteOffers: { $arrayElemAt: [ '$favoriteOffers', 0 ] },
+                favoriteOffers: { $arrayElemAt: ['$favoriteOffers', 0] },
               }
             },
           ]
@@ -122,10 +124,7 @@ export class DefaultOfferService implements OfferService {
         }
       },
       {
-        $unset: 'comments'
-      },
-      {
-        $unset: 'authors'
+        $unset: ['comments', 'authors']
       },
       {
         $sort: {
@@ -158,7 +157,42 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public findPremium(): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel.find({ isPremium: true });
+  public findPremium(limit: number): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel.find({ isPremium: true }).limit(limit).exec();
+  }
+
+  public async findFavorite(userId: string, limit: number): Promise<DocumentType<OfferEntity>[]> {
+    const user = await this.userModel.findById(userId);
+    const pipeline: PipelineStage[] = [
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'authorId',
+          foreignField: '_id',
+          as: 'authors',
+          pipeline: [
+            {
+              $addFields: {
+                id: { $toString: '$_id' }
+              }
+            }
+          ]
+        },
+      },
+      {
+        $addFields: {
+          authorId: { $arrayElemAt: ['$authors', 0] },
+        }
+      },
+      {
+        $match: {
+          '_id': {
+            $in: user?.favoriteOffers
+          }
+        }
+      },
+      { $limit: limit }
+    ];
+    return this.offerModel.aggregate(pipeline).exec();
   }
 }
