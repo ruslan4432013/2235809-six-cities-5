@@ -6,15 +6,11 @@ type CommandCollection = Record<string, Command>
 export class CLIApplication {
 
   private commands: CommandCollection = {};
-
-  constructor(
-    private readonly defaultCommand = '--help'
-  ) {
-  }
+  private readonly defaultCommand = '--help';
 
   public registerCommands(commandList: Command[]) {
     commandList.forEach((command) => {
-      if (Object.hasOwn(this.commands, command.getName())) {
+      if (this.commands[command.getName()]) {
         throw new Error(`Command ${command.getName()} is already registered`);
       }
       this.commands[command.getName()] = command;
