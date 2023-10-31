@@ -9,6 +9,9 @@ export const Component = {
   UserModel: Symbol.for('UserModel'),
   UserController: Symbol.for('UserController'),
 
+  AuthService: Symbol.for('AuthService'),
+  AuthExceptionFilter: Symbol.for('AuthExceptionFilter'),
+
   OfferModel: Symbol.for('OfferModel'),
   OfferService: Symbol.for('OfferService'),
   OfferController: Symbol.for('OfferController'),

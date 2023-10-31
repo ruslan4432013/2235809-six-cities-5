@@ -8,6 +8,8 @@ import { Logger } from '../../libs/logger/index.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import { OfferEntity } from '../offer/index.js';
 import { DEFAULT_AVATAR } from './user.constant.js';
+import { HttpError } from '../../libs/rest/index.js';
+import { StatusCodes } from 'http-status-codes';
 
 @injectable()
 export class DefaultUserService implements UserService {
@@ -21,11 +23,11 @@ export class DefaultUserService implements UserService {
   public async addFavoriteOfferToUser(userId: string, offerId: string): Promise<DocumentType<UserEntity> | null> {
     const user = await this.findById(userId);
     if (!user) {
-      throw new Error('Пользователь не найден');
+      throw new HttpError(StatusCodes.BAD_REQUEST, 'Пользователь не найден', 'UserService');
     }
     const offer = await this.offerModel.findOne({_id: offerId});
     if (!offer) {
-      throw new Error('Предложение не найдено');
+      throw new HttpError(StatusCodes.BAD_REQUEST, 'Предложение не найдено', 'UserService');
     }
     if (!user.favoriteOffers.map((el) => String(el._id)).includes(offerId)) {
       user.favoriteOffers.push(offer);
@@ -37,7 +39,7 @@ export class DefaultUserService implements UserService {
   public async removeFavoriteOfferToUser(userId: string, offerId: string): Promise<DocumentType<UserEntity> | null> {
     const user = await this.findById(userId);
     if (!user) {
-      throw new Error('Пользователь не найден');
+      throw new HttpError(StatusCodes.BAD_REQUEST, 'Пользователь не найден', 'UserService');
     }
     const index = user.favoriteOffers.map((offer) => String(offer._id)).indexOf(offerId);
     if (index !== -1) {

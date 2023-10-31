@@ -9,10 +9,16 @@ export type OfferFindOptions = {
   limit?: number
 }
 
+export type OfferFindOptionsById = {
+  userId?: string,
+  offerId: string,
+}
+
+
 export interface OfferService extends DocumentExists {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
 
-  findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
+  findById(options: OfferFindOptionsById): Promise<DocumentType<OfferEntity> | null>;
 
   findByTitle(title: string): Promise<DocumentType<OfferEntity> | null>;
 
@@ -22,7 +28,7 @@ export interface OfferService extends DocumentExists {
 
   updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
 
-  findPremium(limit?: number): Promise<DocumentType<OfferEntity>[]>;
+  findPremium(options?: OfferFindOptions): Promise<DocumentType<OfferEntity>[]>;
 
   findFavorite(userId: string, limit?: number): Promise<DocumentType<OfferEntity>[]>;
 }

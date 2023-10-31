@@ -6,7 +6,6 @@ import {
   IsDateString,
   IsEnum,
   IsInt,
-  IsMongoId,
   IsObject, Max,
   MaxLength, Min,
   MinLength,
@@ -21,7 +20,6 @@ import {
 } from '../offer.constant.js';
 
 export class CreateOfferDto {
-  @IsMongoId({ message: CreateOfferValidationMessage.userId.invalidId })
   public authorId: string;
 
   @IsEnum(Cities, { message: CreateOfferValidationMessage.city.invalidFormat })

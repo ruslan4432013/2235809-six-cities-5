@@ -37,4 +37,32 @@ Content-Type: image/png
 < /Users/ruslan.ivanov/Documents/projects/2235809-six-cities-5/upload/avatar.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
-##
+###
+
+## Проверить токен пользователя
+GET http://localhost:4000/users/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJpZCI6IjY1NDAyZjAwNTcyYjg5MzViMjMzN2M0ZCIsIm5hbWUiOiJKYWNrIiwiaWF0IjoxNjk4NzA1MzA5LCJleHAiOjE2OTg4NzgxMDl9.U2JXCFq_SjrVrex71BQFVf5piDNV-7DOEyNRE7HnaQ4
+
+###
+
+## Добавить в любимый оффер
+POST http://localhost:4000/users/favorite-offers HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJpZCI6IjY1NDAyZjAwNTcyYjg5MzViMjMzN2M0ZCIsIm5hbWUiOiJKYWNrIiwiaWF0IjoxNjk4NzA1MzA5LCJleHAiOjE2OTg4NzgxMDl9.U2JXCFq_SjrVrex71BQFVf5piDNV-7DOEyNRE7HnaQ4
+Content-Type: application/json
+
+{
+  "offerId": "653bf020fed03cc44c17688d"
+}
+
+###
+
+## Удалить из любимых офферов
+DELETE http://localhost:4000/users/favorite-offers HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJpZCI6IjY1NDAyZjAwNTcyYjg5MzViMjMzN2M0ZCIsIm5hbWUiOiJKYWNrIiwiaWF0IjoxNjk4NzA1MzA5LCJleHAiOjE2OTg4NzgxMDl9.U2JXCFq_SjrVrex71BQFVf5piDNV-7DOEyNRE7HnaQ4
+Content-Type: application/json
+
+{
+  "offerId": "653bf020fed03cc44c17688d"
+}
+
+###
