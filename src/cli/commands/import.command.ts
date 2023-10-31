@@ -46,20 +46,20 @@ export class ImportCommand implements Command {
       return;
     }
     await this.offerService.create({
-      title: offer.title,
+      TITLE: offer.title,
       authorId: user.id,
-      city: offer.city,
+      CITY: offer.city,
       coords: offer.coords,
-      description: offer.description,
-      facilities: offer.facilities,
+      DESCRIPTION: offer.description,
+      FACILITIES: offer.facilities,
       guestsCount: offer.guestsCount,
-      images: offer.images,
-      houseType: offer.houseType,
-      isPremium: offer.isPremium,
-      preview: offer.preview,
-      postDate: offer.postDate,
-      rentPrice: offer.rentPrice,
-      roomsCount: offer.roomsCount,
+      IMAGES: offer.images,
+      HOUSE_TYPE: offer.houseType,
+      IS_PREMIUM: offer.isPremium,
+      PREVIEW: offer.preview,
+      POST_DATE: offer.postDate,
+      RENT_PRICE: offer.rentPrice,
+      ROOMS_COUNT: offer.roomsCount,
     });
   }
 

@@ -7,7 +7,7 @@ type PackageJSONConfig = {
 }
 
 const isPackageJSONConfig = (value: unknown): value is PackageJSONConfig =>
-  typeof value === 'object' && value !== null && !Array.isArray(value) && Object.hasOwn(value, 'version');
+  typeof value === 'object' && value !== null && !Array.isArray(value) && 'version' in value;
 
 export class VersionCommand implements Command {
   constructor(
@@ -28,7 +28,7 @@ export class VersionCommand implements Command {
     return '--version';
   }
 
-  public async execute(..._parameters: string[]) {
+  public async execute() {
     try {
       const version = this.readVersion();
       console.info(version);

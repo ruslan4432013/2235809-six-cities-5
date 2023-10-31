@@ -16,7 +16,6 @@ import { StatusCodes } from 'http-status-codes';
 import { CreateOfferRequest } from './type/create-offer-request.type.js';
 import { ParamOfferId } from './type/param-offerid.type.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { CommentRdo, CommentService } from '../comment/index.js';
 import { ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import {
   DEFAULT_FAVORITE_OFFER_COUNT, DEFAULT_OFFER_COUNT,
@@ -29,7 +28,6 @@ export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
-    @inject(Component.CommentService) private readonly commentService: CommentService
   ) {
     super(logger);
     this.logger.info('Register routes for OfferController…');
@@ -70,15 +68,6 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
-      ]
-    });
-    this.addRoute({
-      path: '/:offerId/comments',
-      method: HttpMethod.Get,
-      handler: this.getComments,
-      middlewares: [
-        new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]
     });
@@ -156,11 +145,6 @@ export class OfferController extends BaseController {
     }
     await this.offerService.deleteById(offerId);
     this.noContend(res, offer);
-  }
-
-  public async getComments({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-    const comments = await this.commentService.findByOfferId(params.offerId);
-    this.ok(res, fillDTO(CommentRdo, comments));
   }
 
   public async update(
