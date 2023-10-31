@@ -30,6 +30,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/offer'
+
   /offers/bundles/favorite:
     get:
       tags:
