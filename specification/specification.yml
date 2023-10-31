@@ -30,6 +30,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/offer'
+
   /offers/bundles/favorite:
     get:
       tags:
@@ -195,7 +196,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
 
-    put:
+    patch:
       tags:
         - offers
       summary: Редактирование предложения
@@ -356,7 +357,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
 
-  /users/verify-auth-status:
+  /users/login:
     get:
       tags:
         - users
@@ -376,7 +377,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
 
-  /users/login:
     post:
       tags:
         - users
@@ -420,6 +420,69 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+
+  /users/favorite-offers:
+    post:
+      tags:
+        - users
+      summary: Добавить предложение в любимые
+      description: Добавляет предложение в любимые
+      responses:
+        "200":
+          description: Предложение успешно добавлено в любимые. Возвращает информацию о пользователе.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        "400":
+          description: Либо пользователь, либо предложение не найдено.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+
+      requestBody:
+        description: Изображение аватара пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/toggleOffer'
+        required: true
+
+    delete:
+      tags:
+        - users
+      summary: Удаляет предложение из любимых
+      description: Удаляет предложение из любимых
+      responses:
+        "200":
+          description: Предложение успешно удалено из любимых. Возвращает информацию о пользователе.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        "400":
+          description: Пользователь не найден.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        "404":
+          description: Пользователь не найден.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+
+      requestBody:
+        description: Изображение аватара пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/toggleOffer'
+        required: true
 
   /users/{userId}/avatar:
     post:
@@ -539,10 +602,6 @@ components:
         description:
           type: string
           description: Описание предложения.
-        postDate:
-          type: string
-          format: date-time
-          description: Дата публикации предложения в формате ISO 8601.
         city:
           type: string
           description: Город, в котором находится предложение.
@@ -557,12 +616,6 @@ components:
         isPremium:
           type: boolean
           description: Флаг "Премиум" для предложения.
-        isFavorites:
-          type: boolean
-          description: Флаг "Избранное" для предложения.
-        rating:
-          type: number
-          description: Рейтинг предложения.
         houseType:
           type: string
           description: Тип жилья.
@@ -572,9 +625,6 @@ components:
         guestsCount:
           type: integer
           description: Максимальное количество гостей.
-        commentsCount:
-          type: integer
-          description: Количество комментариев к предложению.
         rentPrice:
           type: number
           description: Стоимость аренды.
@@ -665,6 +715,16 @@ components:
           description: Идентификатор пользователя
           example:
             65c54ea5eca0ad11e525074e
+
+    toggleOffer:
+      type: object
+      properties:
+        offerId:
+          type: string
+          description: Идентификатор предложения
+          example:
+            65354ea5eca0ad11e555074f
+
 
     comment:
       type: object

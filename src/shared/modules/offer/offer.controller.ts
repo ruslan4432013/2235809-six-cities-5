@@ -2,7 +2,7 @@ import {
   BaseController,
   DocumentExistsMiddleware,
   HttpError,
-  HttpMethod,
+  HttpMethod, PrivateRouteMiddleware,
   ValidateDtoMiddleware
 } from '../../libs/rest/index.js';
 import { inject, injectable } from 'inversify';
@@ -17,9 +17,9 @@ import { CreateOfferRequest } from './type/create-offer-request.type.js';
 import { ParamOfferId } from './type/param-offerid.type.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { CommentRdo, CommentService } from '../comment/index.js';
-import { ValidateObjectIdMiddleware } from '../../libs/rest/middleware/validate-objectid.middleware.js';
+import { ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import {
-  DEFAULT_FAVORITE_OFFER_COUNT,
+  DEFAULT_FAVORITE_OFFER_COUNT, DEFAULT_OFFER_COUNT,
   DEFAULT_PREMIUM_OFFER_COUNT
 } from './offer.constant.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
@@ -38,7 +38,10 @@ export class OfferController extends BaseController {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateOfferDto)
+      ]
     });
     this.addRoute({
       path: '/:offerId',
@@ -54,6 +57,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Delete,
       handler: this.delete,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]
@@ -63,6 +67,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
@@ -86,16 +91,27 @@ export class OfferController extends BaseController {
       path: '/bundles/favorite',
       method: HttpMethod.Get,
       handler: this.getFavorite,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+      ]
     });
   }
 
-  public async index(_req: Request, res: Response): Promise<void> {
-    const offers = await this.offerService.find();
+  public async index({ tokenPayload, query }: Request, res: Response): Promise<void> {
+    const { limit = DEFAULT_OFFER_COUNT } = query ?? {};
+    if (Number.isNaN(+limit)) {
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        'Bad <<limit>> param.',
+        'OfferController'
+      );
+    }
+    const offers = await this.offerService.find({ userId: tokenPayload?.id, limit: +limit });
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
   public async create(
-    { body }: CreateOfferRequest,
+    { body, tokenPayload }: CreateOfferRequest,
     res: Response): Promise<void> {
     const existOffer = await this.offerService.findByTitle(body.title);
     if (existOffer) {
@@ -105,8 +121,9 @@ export class OfferController extends BaseController {
         'OfferController'
       );
     }
-    const result = await this.offerService.create(body);
-    this.created(res, fillDTO(OfferRdo, result));
+    const result = await this.offerService.create({ ...body, authorId: tokenPayload.id });
+    const offer = await this.offerService.findById(result.id);
+    this.created(res, fillDTO(OfferRdo, offer));
   }
 
   public async show(
@@ -114,7 +131,8 @@ export class OfferController extends BaseController {
     res: Response
   ) {
     const { offerId } = req.params;
-    const offer = await this.offerService.findById(offerId);
+    const { tokenPayload } = req;
+    const offer = await this.offerService.findById({ offerId, userId: tokenPayload?.id });
     this.ok(res, fillDTO(OfferRdo, offer));
   }
 
@@ -123,8 +141,21 @@ export class OfferController extends BaseController {
     res: Response
   ) {
     const { offerId } = req.params;
-    const offer = await this.offerService.deleteById(offerId);
-    this.noContend(res, fillDTO(OfferRdo, offer));
+    const { tokenPayload } = req;
+
+    const offer = await this.offerService.findById({ offerId });
+    if (!offer) {
+      return;
+    }
+    if (String(offer.authorId._id) !== tokenPayload.id) {
+      throw new HttpError(
+        StatusCodes.FORBIDDEN,
+        'The user who makes the request is not the author',
+        'OfferController'
+      );
+    }
+    await this.offerService.deleteById(offerId);
+    this.noContend(res, offer);
   }
 
   public async getComments({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
@@ -133,20 +164,31 @@ export class OfferController extends BaseController {
   }
 
   public async update(
-    { body, params }: Request<ParamOfferId, unknown, UpdateOfferDto>,
+    { body, params, tokenPayload }: Request<ParamOfferId, unknown, UpdateOfferDto>,
     res: Response
   ) {
+    const offer = await this.offerService.findById({ offerId: params.offerId });
+    if (String(offer?.authorId._id) !== tokenPayload.id) {
+      throw new HttpError(
+        StatusCodes.FORBIDDEN,
+        `User not have permission for edit offer ${offer?.title}`,
+        'OfferController'
+      );
+    }
     const updatedOffer = await this.offerService.updateById(params.offerId, body);
+
     this.ok(res, fillDTO(OfferRdo, updatedOffer));
   }
 
-  public async getPremium(_req: Request, res: Response) {
-    const premiumOffers = await this.offerService.findPremium(DEFAULT_PREMIUM_OFFER_COUNT);
+  public async getPremium(req: Request, res: Response) {
+    const { tokenPayload } = req;
+    const { limit = DEFAULT_PREMIUM_OFFER_COUNT } = req.query;
+    const premiumOffers = await this.offerService.findPremium({ userId: tokenPayload?.id, limit: +limit });
     this.ok(res, fillDTO(OfferRdo, premiumOffers));
   }
 
-  public async getFavorite(_req: Request, res: Response) {
-    const favoriteOffers = await this.offerService.findFavorite('653ba46e50a63c05c27c6f7c', DEFAULT_FAVORITE_OFFER_COUNT);
+  public async getFavorite({ tokenPayload: { id } }: Request, res: Response) {
+    const favoriteOffers = await this.offerService.findFavorite(id, DEFAULT_FAVORITE_OFFER_COUNT);
     this.ok(res, fillDTO(OfferRdo, favoriteOffers));
   }
 }
