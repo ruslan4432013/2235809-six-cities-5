@@ -2,6 +2,7 @@ import { parseUser } from './user.js';
 import { getHouseType, HouseOffer } from '../types/index.js';
 import { parseCoords } from './coords.js';
 import { parseFacilities } from './facility.js';
+import { parseCity } from './cities.js';
 
 export const createOffer = (offerData: string): HouseOffer => {
   const [
@@ -25,7 +26,7 @@ export const createOffer = (offerData: string): HouseOffer => {
     title,
     description,
     postDate: new Date(createdDate),
-    city,
+    city: parseCity(city),
     preview,
     images: images.split(';'),
     isPremium: isPremiumFlag === 'Yes',
