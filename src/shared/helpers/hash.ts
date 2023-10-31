@@ -1,6 +1,5 @@
-import * as crypto from 'node:crypto';
+import { createHmac } from 'node:crypto';
 
-export const createSHA256 = (line: string, salt: string) => {
-  const shaHasher = crypto.createHmac('sha256', salt);
-  return shaHasher.update(line).digest('hex');
-};
+export const createSHA256 = (line: string, salt: string) =>
+  createHmac('sha256', salt).update(line).digest('hex');
+

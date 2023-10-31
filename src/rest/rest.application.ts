@@ -10,7 +10,7 @@ import { Controller, ExceptionFilter, ParseTokenMiddleware } from '../shared/lib
 @injectable()
 export class RestApplication {
 
-  private server: Express;
+  private readonly server: Express = express();
 
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
@@ -22,7 +22,6 @@ export class RestApplication {
     @inject(Component.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
     @inject(Component.AuthExceptionFilter) private readonly authExceptionFilter: ExceptionFilter,
   ) {
-    this.server = express();
   }
 
   private async _initServer() {

@@ -3,12 +3,12 @@ import chalk from 'chalk';
 
 
 const paintCommand = (cmd: string) => chalk.blue.bold(cmd);
-const $yellow = (cmd: string) => chalk.yellow(cmd);
-const $green = (cmd: string) => chalk.green(cmd);
-const $red = (cmd: string) => chalk.red(cmd);
+const paintToYellow = (cmd: string) => chalk.yellow(cmd);
+const paintToGreen = (cmd: string) => chalk.green(cmd);
+const paintToRed = (cmd: string) => chalk.red(cmd);
 
-const importCmdText = `${paintCommand('--import')} ${$red('<path>')} ${$green('<login>')} ${$yellow('<password>')} ${$green('<host>')} ${$yellow('dbname')} ${$red('salt')}`;
-const generateCmdText = `${paintCommand('--generate')} ${$yellow('<n>')} ${$green('<path>')} ${$red('<url>')}`;
+const importCmdText = `${paintCommand('--import')} ${paintToRed('<path>')} ${paintToGreen('<login>')} ${paintToYellow('<password>')} ${paintToGreen('<host>')} ${paintToYellow('<dbname>')} ${paintToRed('<salt>')}`;
+const generateCmdText = `${paintCommand('--generate')} ${paintToYellow('<n>')} ${paintToGreen('<path>')} ${paintToRed('<url>')}`;
 
 export class HelpCommand implements Command {
 
@@ -22,10 +22,10 @@ export class HelpCommand implements Command {
         Пример:
             cli --<command> [--arguments]
         Команды:
-            ${paintCommand('--version')}:                                                     # выводит номер версии
-            ${paintCommand('--help')}:                                                        # печатает этот текст
-            ${importCmdText}:         # импортирует данные из TSV в MongoDB
-            ${generateCmdText}:                                   # генерирует произвольное количество тестовых данных
+            ${paintCommand('--version')}:                                                     # выводит номер версии приложения
+            ${paintCommand('--help')}:                                                        # печатает возможные команды cli приложения
+            ${importCmdText}:         # импортирует данные из TSV, по пути, переданным аргументом <path> в MongoDB, следующими параметрами передается <login> - логин, <password> - пароль, <host> - хост на котором крутится MongoDB, <dbname> - название базы данных, <salt> - секретный ключ
+            ${generateCmdText}:                                   # генерирует указанное первым аргументом количество тестовых данных в TSV файл, по пути <path> и данные берет из мокового api, по пути <url>
     `);
   }
 }
