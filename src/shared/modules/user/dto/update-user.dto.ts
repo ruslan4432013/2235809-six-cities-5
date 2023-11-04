@@ -4,4 +4,5 @@ export class UpdateUserDto {
   public name?: string;
   public email?: string;
   public type?: UserType;
+  public avatarPath?: string;
 }

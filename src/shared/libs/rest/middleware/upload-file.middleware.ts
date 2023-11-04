@@ -19,9 +19,10 @@ export class UploadFileMiddleware implements Middleware {
       destination: this.uploadDirectory,
       filename: (_req, file, callback) => {
         const fileExtension = extname(file.originalname);
+        console.log({ fileExtension, file });
         if (ALLOWED_AVATAR_EXTENSIONS.includes(fileExtension)) {
           const filename = randomUUID();
-          return callback(null, `${filename}.${fileExtension}`);
+          return callback(null, `${filename}${fileExtension}`);
         }
         return callback(new HttpError(
           StatusCodes.BAD_REQUEST,
