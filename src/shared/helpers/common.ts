@@ -1,4 +1,7 @@
 import { ClassConstructor, plainToInstance } from 'class-transformer';
+import { ValidationError } from 'class-validator';
+import { ValidationErrorField } from '../types/index.js';
+import { ApplicationError } from '../libs/rest/index.js';
 
 export const generateRandomValue = (min: number, max: number, numAfterDigit = 0) =>
   +((Math.random() * (max - min)) + min).toFixed(numAfterDigit);
@@ -34,6 +37,18 @@ export const fillDTO = <T, V>(someDto: ClassConstructor<T>, plainObject: V) => p
   { excludeExtraneousValues: true }
 );
 
-export const createErrorObject = (message: string) => ({
-  error: message,
+export const createErrorObject = (errorType: ApplicationError, error: string, details: ValidationErrorField[] = []) => ({
+  errorType, error, details
 });
+
+export const mapValidationErrors = (errors: ValidationError[]): ValidationErrorField[] =>
+  errors.map(({ property, value, constraints }) => ({
+    property,
+    value,
+    messages: constraints ? Object.values(constraints) : [],
+  }));
+
+export const getFullServerPath = (host: string, port: number) => `http://${host}:${port}`;
+
+export const isObject = (value: unknown): value is Record<string, object> =>
+  typeof value === 'object' && value !== null;
