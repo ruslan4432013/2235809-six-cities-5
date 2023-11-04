@@ -1,6 +1,7 @@
 GET http://localhost:4000/offers?limit=200 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJpZCI6IjY1NDAyZjAwNTcyYjg5MzViMjMzN2M0ZCIsIm5hbWUiOiJKYWNrIiwiaWF0IjoxNjk4NzYwNzYzLCJleHAiOjE2OTg5MzM1NjN9.ny2xpvgu03y4uk47GBi0chVZDAwQzORm3y9uOpIqGnY
+
 ###
 
 ## Создать новое объявление
@@ -16,7 +17,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZ
   "rentPrice": 8446,
   "city": "Cologne",
   "isPremium": true,
-  "images": ["https://example.com/photo5.jpg", "https://example.com/photo13.jpg", "https://example.com/photo27.jpg", "https://example.com/photo1.jpg", "https://example.com/photo15.jpg", "https://example.com/photo4.jpg", "https://example.com/photo16.jpg", "https://example.com/photo14.jpg", "https://example.com/photo11.jpg", "https://example.com/photo10.jpg", "https://example.com/photo25.jpg"],
+  "images": [
+    "https://example.com/photo5.jpg",
+    "https://example.com/photo13.jpg",
+    "https://example.com/photo27.jpg",
+    "https://example.com/photo1.jpg",
+    "https://example.com/photo15.jpg",
+    "https://example.com/photo4.jpg",
+    "https://example.com/photo16.jpg",
+    "https://example.com/photo14.jpg",
+    "https://example.com/photo11.jpg",
+    "https://example.com/photo10.jpg",
+    "https://example.com/photo25.jpg"
+  ],
   "coords": {
     "latitude": "4.351697",
     "longitude": "48.85661"
@@ -37,6 +50,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZ
 GET http://localhost:4000/offers/653bf020fed03cc44c176866 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJpZCI6IjY1NDAyZjAwNTcyYjg5MzViMjMzN2M0ZCIsIm5hbWUiOiJKYWNrIiwiaWF0IjoxNjk4NzA1MzA5LCJleHAiOjE2OTg4NzgxMDl9.U2JXCFq_SjrVrex71BQFVf5piDNV-7DOEyNRE7HnaQ4
+
 ###
 
 DELETE http://localhost:4000/offers/653d889a21f3e0f7978b4874 HTTP/1.1
@@ -68,5 +82,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZ
 GET http://localhost:4000/offers/bundles/premium HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJpZCI6IjY1NDAyZjAwNTcyYjg5MzViMjMzN2M0ZCIsIm5hbWUiOiJKYWNrIiwiaWF0IjoxNjk4NzA1MzA5LCJleHAiOjE2OTg4NzgxMDl9.U2JXCFq_SjrVrex71BQFVf5piDNV-7DOEyNRE7HnaQ4
+
+###
+
+## Загрузить изображение для объявления
+POST http://localhost:4000/offers/653bf020fed03cc44c176866/preview HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJpZCI6IjY1NDAyZjAwNTcyYjg5MzViMjMzN2M0ZCIsIm5hbWUiOiJKYWNrIiwiaWF0IjoxNjk5MTMwNjAwLCJleHAiOjE2OTkzMDM0MDB9.k0BN2QYC2bF-kpcO-JbWtJFq0Bzzadj_XsBzpp2rFdQ
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="preview"; filename="screen.png"
+Content-Type: image/png
+
+< /Users/ruslan.ivanov/Documents/projects/2235809-six-cities-5/upload/screen.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ###

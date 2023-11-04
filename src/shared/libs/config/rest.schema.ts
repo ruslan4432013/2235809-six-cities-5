@@ -28,7 +28,7 @@ export const configRestSchema = convict<RestSchema>({
     doc: 'Host where started service',
     format: String,
     env: 'HOST',
-    default: 'localhost'
+    default: 'http://localhost'
   },
   PORT: {
     doc: 'Port for incoming connections',

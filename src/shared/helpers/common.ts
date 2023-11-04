@@ -48,7 +48,7 @@ export const mapValidationErrors = (errors: ValidationError[]): ValidationErrorF
     messages: constraints ? Object.values(constraints) : [],
   }));
 
-export const getFullServerPath = (host: string, port: number) => `http://${host}:${port}`;
+export const getFullServerPath = (host: string, port: number) => `${host}:${port}`;
 
 export const isObject = (value: unknown): value is Record<string, object> =>
   typeof value === 'object' && value !== null;
