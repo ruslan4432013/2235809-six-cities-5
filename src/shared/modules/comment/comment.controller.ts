@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import {
-  BaseController, DocumentExistsMiddleware,
+  BaseController,
+  DocumentExistsMiddleware,
   HttpMethod,
   PrivateRouteMiddleware,
   ValidateDtoMiddleware
