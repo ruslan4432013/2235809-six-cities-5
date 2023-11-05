@@ -18,12 +18,14 @@ import { ParamOfferId } from './type/param-offerid.type.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import {
+  ALLOWED_IMAGE_EXTENSION,
   DEFAULT_FAVORITE_OFFER_COUNT, DEFAULT_OFFER_COUNT,
-  DEFAULT_PREMIUM_OFFER_COUNT
+  DEFAULT_PREMIUM_OFFER_COUNT, REQUIRED_IMAGES_LENGTH
 } from './offer.constant.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
-import { UploadImageRdo } from './rdo/upload-image.rdo.js';
+import { UploadPreviewRdo } from './rdo/upload-preview.rdo.js';
+import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -35,6 +37,22 @@ export class OfferController extends BaseController {
     super(logger);
     this.logger.info('Register routes for OfferController…');
     this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
+    this.addRoute({
+      path: '/:offerId/images',
+      method: HttpMethod.Post,
+      handler: this.uploadImages,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId', 'params'),
+        new UploadFileMiddleware(
+          this.configService.get('UPLOAD_DIRECTORY'),
+          'images',
+          ALLOWED_IMAGE_EXTENSION,
+          REQUIRED_IMAGES_LENGTH,
+        )
+      ]
+    });
     this.addRoute({
       path: '/',
       method: HttpMethod.Post,
@@ -143,7 +161,7 @@ export class OfferController extends BaseController {
     const { offerId } = params;
     const updateDto = { preview: file?.filename };
     await this.offerService.updateById(offerId, updateDto);
-    this.created(res, fillDTO(UploadImageRdo, updateDto));
+    this.created(res, fillDTO(UploadPreviewRdo, updateDto));
   }
 
   public async delete(
@@ -191,6 +209,24 @@ export class OfferController extends BaseController {
     const { limit = DEFAULT_PREMIUM_OFFER_COUNT } = req.query;
     const premiumOffers = await this.offerService.findPremium({ userId: tokenPayload?.id, limit: +limit });
     this.ok(res, fillDTO(OfferRdo, premiumOffers));
+  }
+
+  public async uploadImages({ params, files }: Request<ParamOfferId>, res: Response) {
+    if (!Array.isArray(files)) {
+      throw new HttpError(StatusCodes.BAD_REQUEST, 'No images');
+    }
+
+    if (files.length !== REQUIRED_IMAGES_LENGTH) {
+      throw new HttpError(StatusCodes.BAD_REQUEST, `Wrong files counts, must be ${REQUIRED_IMAGES_LENGTH}`);
+    }
+
+    const { offerId } = params;
+    const fileNames = files.map((file) => file.filename);
+    const updateDto = {
+      images: fileNames
+    };
+    await this.offerService.updateById(offerId, updateDto);
+    this.created(res, fillDTO(UploadImagesRdo, updateDto));
   }
 
   public async getFavorite({ tokenPayload: { id } }: Request, res: Response) {

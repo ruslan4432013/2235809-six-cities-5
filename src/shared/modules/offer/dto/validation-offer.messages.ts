@@ -6,7 +6,7 @@ import {
   TITLE_LENGTH
 } from '../offer.constant.js';
 
-export const CREATE_OFFER_VALIDATION_MESSAGE = {
+export const CREATE_OFFER_VALIDATION_MESSAGES = {
   TITLE: {
     MIN_LENGTH: `Minimum title length must be ${TITLE_LENGTH.MIN}`,
     MAX_LENGTH: `Maximum title length must be ${TITLE_LENGTH.MAX}`,

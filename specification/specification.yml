@@ -15,6 +15,42 @@ tags:
   - name: users
     description: Действия с пользователем.
 paths:
+
+  /offers/{offerId}/images:
+    post:
+      tags:
+        - offers
+      summary: Загрузка изображения предложений
+      description: Загружает изображения с описанием объекта. Изображения должны иметь формат PNG или JPG.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Изображения успешно загружены.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      example: http://localhost:4000/upload/Uq-PzHXRZnm6NzYvfjFGA.png
+        '401':
+          description: A user is not authorized to upload images.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
   /offers/bundles/premium:
     get:
       tags:

@@ -22,6 +22,7 @@ import { AuthService } from '../auth/index.js';
 import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 import { FavoriteOfferRequest } from './types/favorite-offer-request.type.js';
 import { UploadUserAvatarRdo } from './rdo/upload-user-avatar.rdo.js';
+import { ALLOWED_AVATAR_EXTENSIONS } from './user.constant.js';
 
 
 @injectable()
@@ -48,7 +49,7 @@ export class UserController extends BaseController {
       middlewares: [
         new ValidateObjectIdMiddleware('userId'),
         new DocumentExistsMiddleware(this.userService, 'User', 'userId', 'params'),
-        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar')
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar', ALLOWED_AVATAR_EXTENSIONS)
       ]
     });
     this.addRoute({
