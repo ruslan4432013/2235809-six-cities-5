@@ -5,3 +5,17 @@ declare module 'express-serve-static-core' {
     tokenPayload: TokenPayload;
   }
 }
+
+declare global {
+
+  interface String {
+    bold: string,
+    blue: string,
+    yellow: string,
+    red: string
+    green: string
+  }
+}
+
+
+export {};

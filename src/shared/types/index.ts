@@ -7,3 +7,4 @@ export * from './user-type.enum.js';
 export * from './component.enum.js';
 export * from './sort-type.enum.js';
 export * from './cities.enum.js';
+export * from './validation-error-field.type.js';

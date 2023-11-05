@@ -3,7 +3,11 @@ export const Component = {
   Logger: Symbol.for('Logger'),
   Config: Symbol.for('Config'),
   DatabaseClient: Symbol.for('DatabaseClient'),
+  PathTransformer: Symbol.for('PathTransformer'),
+
   ExceptionFilter: Symbol.for('ExceptionFilter'),
+  HttpExceptionFilter: Symbol.for('HttpExceptionFilter'),
+  ValidationExceptionFilter: Symbol.for('ValidationExceptionFilter'),
 
   UserService: Symbol.for('UserService'),
   UserModel: Symbol.for('UserModel'),

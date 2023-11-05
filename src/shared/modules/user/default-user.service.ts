@@ -25,7 +25,7 @@ export class DefaultUserService implements UserService {
     if (!user) {
       throw new HttpError(StatusCodes.BAD_REQUEST, 'Пользователь не найден', 'UserService');
     }
-    const offer = await this.offerModel.findOne({_id: offerId});
+    const offer = await this.offerModel.findOne({ _id: offerId });
     if (!offer) {
       throw new HttpError(StatusCodes.BAD_REQUEST, 'Предложение не найдено', 'UserService');
     }
@@ -79,5 +79,9 @@ export class DefaultUserService implements UserService {
       return existedUser;
     }
     return this.create(dto, salt);
+  }
+
+  public async exists(userId: string) {
+    return (await this.userModel.findById(userId) !== null);
   }
 }

@@ -61,7 +61,7 @@ npm run ts -- <Путь к модулю с ts-кодом>
 #### Запустить JSON-server 
 
 ```bash
-npm run mock:server
+npm run start:mock-server
 ```
 
 Данные берутся из корня проекта ./mocks/mock-server-data.json

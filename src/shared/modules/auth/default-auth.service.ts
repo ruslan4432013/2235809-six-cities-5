@@ -1,12 +1,10 @@
 import { AuthService } from './auth-service.interface.js';
-import { UserEntity } from '../user/index.js';
-import { LoginUserDto } from '../user/dto/login-user.dto.js';
+import { LoginUserDto, UserService, UserEntity } from '../user/index.js';
 import { inject, injectable } from 'inversify';
 import { Component } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
-import { UserService } from '../user/user-service.interface.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
-import * as crypto from 'node:crypto';
+import { createSecretKey } from 'node:crypto';
 import { TokenPayload } from './types/token-payload.type.js';
 import { SignJWT } from 'jose';
 import { JWT_ALGORITHM, JWT_EXPIRED } from './auth.constant.js';
@@ -24,7 +22,7 @@ export class DefaultAuthService implements AuthService {
 
   public async authenticate(user: UserEntity): Promise<string> {
     const jwtSecret = this.config.get('JWT_SECRET');
-    const secretKey = crypto.createSecretKey(jwtSecret, 'utf-8');
+    const secretKey = createSecretKey(jwtSecret, 'utf-8');
     const tokenPayload: TokenPayload = {
       email: user.email,
       id: user.id,
