@@ -85,13 +85,62 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZ
 
 ###
 
-## Загрузить изображение для объявления
+## Загрузить превью для объявления
 POST http://localhost:4000/offers/653bf020fed03cc44c176866/preview HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJpZCI6IjY1NDAyZjAwNTcyYjg5MzViMjMzN2M0ZCIsIm5hbWUiOiJKYWNrIiwiaWF0IjoxNjk5MTMwNjAwLCJleHAiOjE2OTkzMDM0MDB9.k0BN2QYC2bF-kpcO-JbWtJFq0Bzzadj_XsBzpp2rFdQ
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="preview"; filename="screen.png"
+Content-Type: image/png
+
+< /Users/ruslan.ivanov/Documents/projects/2235809-six-cities-5/upload/screen.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+## Загрузить изображения для объявления
+POST http://localhost:4000/offers/653bf020fed03cc44c176866/images HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJpZCI6IjY1NDAyZjAwNTcyYjg5MzViMjMzN2M0ZCIsIm5hbWUiOiJKYWNrIiwiaWF0IjoxNjk5MTMwNjAwLCJleHAiOjE2OTkzMDM0MDB9.k0BN2QYC2bF-kpcO-JbWtJFq0Bzzadj_XsBzpp2rFdQ
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="images"; filename="screen.png"
+Content-Type: image/png
+
+< /Users/ruslan.ivanov/Documents/projects/2235809-six-cities-5/upload/screen.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW;
+Content-Disposition: form-data; name="images"; filename="screen.png"
+Content-Type: image/png
+
+< /Users/ruslan.ivanov/Documents/projects/2235809-six-cities-5/upload/screen.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW;
+Content-Disposition: form-data; name="images"; filename="screen.png"
+Content-Type: image/png
+
+< /Users/ruslan.ivanov/Documents/projects/2235809-six-cities-5/upload/screen.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW;
+Content-Disposition: form-data; name="images"; filename="screen.png"
+Content-Type: image/png
+
+< /Users/ruslan.ivanov/Documents/projects/2235809-six-cities-5/upload/screen.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW;
+Content-Disposition: form-data; name="images"; filename="screen.png"
+Content-Type: image/png
+
+< /Users/ruslan.ivanov/Documents/projects/2235809-six-cities-5/upload/screen.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW;
+Content-Disposition: form-data; name="images"; filename="screen.png"
 Content-Type: image/png
 
 < /Users/ruslan.ivanov/Documents/projects/2235809-six-cities-5/upload/screen.png
