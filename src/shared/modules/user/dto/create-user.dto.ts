@@ -1,10 +1,10 @@
 import { UserType } from '../../../types/index.js';
 import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
-import { CREATE_USER_MESSAGES } from './create-user.messages.js';
+import { CREATE_USER_MESSAGES } from './validation-user.messages.js';
 import { USER_FIELDS_LENGTH } from '../user.constant.js';
 
 export class CreateUserDto {
-  @IsEmail({}, { message: CREATE_USER_MESSAGES.EMAIL.INVALID_FORMAT })
+  @IsEmail(undefined, { message: CREATE_USER_MESSAGES.EMAIL.INVALID_FORMAT })
   public email: string;
 
   @IsString({ message: CREATE_USER_MESSAGES.NAME.INVALID_FORMAT })

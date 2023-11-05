@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 
-export class UploadImageRdo {
+export class UploadPreviewRdo {
   @Expose()
   public preview: string;
 }

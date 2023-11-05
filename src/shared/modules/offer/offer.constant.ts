@@ -17,10 +17,6 @@ export const ROOMS_COUNT_LENGTH = {
   MAX: 8
 };
 
-export const PREVIEW_LENGTH = {
-  MAX: 256
-};
-
 export const GUEST_COUNT_LENGTH = {
   MIN: 1,
   MAX: 5
@@ -31,3 +27,8 @@ export const RENT_PRICE = {
   MIN: 100,
   MAX: 100_000
 };
+
+
+export const REQUIRED_IMAGES_LENGTH = 6;
+
+export const ALLOWED_IMAGE_EXTENSION = ['.jpg', '.png'];
