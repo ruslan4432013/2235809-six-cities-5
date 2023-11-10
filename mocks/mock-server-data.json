@@ -1,0 +1,148 @@
+{
+  "api": {
+    "titles": [
+      "Уютная квартира",
+      "Просторный дом",
+      "Студия в центре",
+      "Семейный дом",
+      "Гостевая комната",
+      "Уютная комната"
+    ],
+    "descriptions": [
+      "Прекрасная квартира в центре города.",
+      "Прекрасный дом в тихом районе.",
+      "Компактная студия в историческом районе.",
+      "Уютный дом с большим двором.",
+      "Уютная комната в дружелюбном доме.",
+      "Комфортабельная комната с отдельной ванной комнатой."
+    ],
+    "postDates": [
+      "2023-09-22T00:00:00.000Z",
+      "2023-09-23T00:00:00.000Z",
+      "2023-09-24T00:00:00.000Z",
+      "2023-09-25T00:00:00.000Z",
+      "2023-09-26T00:00:00.000Z",
+      "2023-09-28T00:00:00.000Z"
+    ],
+    "cities": [
+      "Paris",
+      "Cologne",
+      "Brussels",
+      "Amsterdam",
+      "Hamburg",
+      "Dusseldorf"
+    ],
+    "previews": [
+      "https://example.com/preview1.jpg",
+      "https://example.com/preview2.jpg",
+      "https://example.com/preview3.jpg",
+      "https://example.com/preview4.jpg",
+      "https://example.com/preview5.jpg",
+      "https://example.com/preview7.jpg"
+    ],
+    "images": [
+      "https://example.com/photo1.jpg",
+      "https://example.com/photo2.jpg",
+      "https://example.com/photo3.jpg",
+      "https://example.com/photo4.jpg",
+      "https://example.com/photo5.jpg",
+      "https://example.com/photo6.jpg",
+      "https://example.com/photo7.jpg",
+      "https://example.com/photo8.jpg",
+      "https://example.com/photo9.jpg",
+      "https://example.com/photo10.jpg",
+      "https://example.com/photo11.jpg",
+      "https://example.com/photo12.jpg",
+      "https://example.com/photo13.jpg",
+      "https://example.com/photo14.jpg",
+      "https://example.com/photo15.jpg",
+      "https://example.com/photo16.jpg",
+      "https://example.com/photo17.jpg",
+      "https://example.com/photo18.jpg",
+      "https://example.com/photo19.jpg",
+      "https://example.com/photo20.jpg",
+      "https://example.com/photo21.jpg",
+      "https://example.com/photo22.jpg",
+      "https://example.com/photo23.jpg",
+      "https://example.com/photo24.jpg",
+      "https://example.com/photo25.jpg",
+      "https://example.com/photo26.jpg",
+      "https://example.com/photo27.jpg",
+      "https://example.com/photo28.jpg",
+      "https://example.com/photo29.jpg",
+      "https://example.com/photo30.jpg",
+      "https://example.com/photo37.jpg",
+      "https://example.com/photo38.jpg",
+      "https://example.com/photo39.jpg",
+      "https://example.com/photo40.jpg",
+      "https://example.com/photo41.jpg",
+      "https://example.com/photo42.jpg"
+    ],
+    "houseTypes": [
+      "apartment",
+      "house",
+      "room"
+    ],
+    "facilities": [
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Washer",
+      "Towels",
+      "Baby seat",
+      "Fridge"
+    ],
+    "names": [
+      "Анна",
+      "Иван",
+      "Елена",
+      "Максим",
+      "Ольга",
+      "Алексей"
+    ],
+    "emails": [
+      "anna@example.com",
+      "ivan@example.com",
+      "elena@example.com",
+      "maxim@example.com",
+      "olga@example.com",
+      "alexey@example.com"
+    ],
+    "avatars": [
+      "avatar1.jpg",
+      "avatar2.jpg",
+      "avatar3.jpg",
+      "avatar4.jpg",
+      "avatar5.jpg",
+      "avatar6.jpg"
+    ],
+    "passwords": [
+      "123456",
+      "qwerty",
+      "pass123",
+      "987654",
+      "secret",
+      "secure123"
+    ],
+    "userTypes": [
+      "Default",
+      "Pro"
+    ],
+    "latitudes": [
+      "48.85661",
+      "50.938361",
+      "50.846557",
+      "52.370216",
+      "53.550341",
+      "51.225402"
+    ],
+    "longitudes": [
+      "2.351499",
+      "6.959974",
+      "4.351697",
+      "4.895168",
+      "10.000654",
+      "6.776314"
+    ]
+  }
+}
