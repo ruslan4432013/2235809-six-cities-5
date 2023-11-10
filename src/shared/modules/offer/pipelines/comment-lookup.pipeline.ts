@@ -1,6 +1,6 @@
 import { PipelineStage } from 'mongoose';
 
-export const commentLookupPipline: PipelineStage = {
+export const commentLookupPipeline: PipelineStage = {
   $lookup: {
     from: 'comments',
     localField: '_id',

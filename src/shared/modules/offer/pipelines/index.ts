@@ -1,5 +1,5 @@
 import { PipelineStage } from 'mongoose';
-import { commentLookupPipline } from './comment-lookup.pipline.js';
+import { commentLookupPipeline } from './comment-lookup.pipeline.js';
 import { getCurrentUserLookupPipeline } from './user-lookup.pipline.js';
 import { usersUnwindPipeline } from './users-unwind.pipeline.js';
 import { authorsLookupPipeline } from './authors-lookup.pipeline.js';
@@ -15,7 +15,7 @@ type Options = {
 }
 export const getDefaultFindOffersPipeline = ({ userId, limit }: Options): PipelineStage[] => {
   const pipelines = [
-    commentLookupPipline,
+    commentLookupPipeline,
     getCurrentUserLookupPipeline(userId),
     usersUnwindPipeline,
     authorsLookupPipeline,
