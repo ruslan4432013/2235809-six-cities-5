@@ -46,10 +46,7 @@ export class DefaultOfferService implements OfferService {
       },
       ...getDefaultFindOffersPipeline({ userId }),
     ];
-    const offers = await this.offerModel
-      .aggregate(pipeline)
-      .exec();
-    return offers[0];
+    return this.offerModel.aggregate(pipeline).exec().then((r) => r.at(0));
   }
 
   public async find(options?: OfferFindOptions): Promise<DocumentType<OfferEntity>[]> {
@@ -66,8 +63,7 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async exists(documentId: string): Promise<boolean> {
-    return (await this.offerModel
-      .exists({ _id: documentId }) !== null);
+    return this.offerModel.exists({ _id: documentId }).then((r) => !!r || r !== null);
   }
 
   public updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {

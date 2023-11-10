@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import 'reflect-metadata';
-import { colors } from './shared/helpers/colors.js';
 import { Container } from 'inversify';
 import { RestApplication } from './rest/index.js';
 import { Component } from './shared/types/index.js';
@@ -10,7 +9,6 @@ import { createOfferContainer } from './shared/modules/offer/index.js';
 import { createCommentContainer } from './shared/modules/comment/index.js';
 import { createAuthContainer } from './shared/modules/auth/index.js';
 
-colors.enable();
 
 const bootstrap = async () => {
   const appContainer = Container.merge(

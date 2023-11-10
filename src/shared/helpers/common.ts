@@ -8,22 +8,12 @@ export const generateRandomValue = (min: number, max: number, numAfterDigit = 0)
 
 export const getRandomItems = <T>(arr: T[]): T[] => {
   const count = generateRandomValue(1, arr.length - 1);
-
-  const shuffled = arr.slice(); // Создаем копию массива
-  let currentIndex = shuffled.length;
-  let randomIndex, temporaryValue;
-
-  // Перемешиваем элементы массива (алгоритм тасования Фишера-Йетса)
-  while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    temporaryValue = shuffled[currentIndex];
-    shuffled[currentIndex] = shuffled[randomIndex];
-    shuffled[randomIndex] = temporaryValue;
+  const shuffled = arr.slice();
+  for (let i = shuffled.length; i !== 0; i--) {
+    const randomIndex = Math.floor(Math.random() * i);
+    [shuffled[i], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[i]];
   }
 
-  // Возвращаем первые `count` элементов
   return shuffled.slice(0, count);
 };
 
