@@ -25,14 +25,12 @@ export class PathTransformer {
   }
 
   public execute(data: Record<string, unknown>): Record<string, unknown> {
-    const stack = [data];
-    while (stack.length > 0) {
-      const current = stack.pop();
-      for (const key in current) {
-        if (key in current) {
-          const value = current[key];
+    const processObject = (obj: Record<string, unknown>) => {
+      for (const key in obj) {
+        if (key in obj) {
+          const value = obj[key];
           if (isObject(value)) {
-            stack.push(value);
+            processObject(value);
             continue;
           }
 
@@ -43,11 +41,12 @@ export class PathTransformer {
             const serverPort = this.config.get('PORT');
             const rootPath = this.hasDefaultImage(value) ? staticPath : uploadPath;
 
-            current[key] = `${getFullServerPath(serverHost, serverPort)}${rootPath}/${value}`;
+            obj[key] = `${getFullServerPath(serverHost, serverPort)}${rootPath}/${value}`;
           }
         }
       }
-    }
+    };
+    processObject(data);
     return data;
   }
 }

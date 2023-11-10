@@ -2,19 +2,9 @@ import { OfferGenerator } from './offer-generator.interface.js';
 import { MockServerData } from '../../types/mock-server-data.type.js';
 import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
 import dayjs from 'dayjs';
+import { WEEKS } from './offer-generator.constant.js';
+import { GUEST_COUNT_LENGTH, RENT_PRICE, ROOMS_COUNT_LENGTH } from '../../modules/offer/offer.constant.js';
 
-
-const MIN_PRICE = 100;
-const MAX_PRICE = 100_000;
-
-const MIN_ROOM_COUNT = 1;
-const MAX_ROOM_COUNT = 8;
-
-const MIN_GUESTS_COUNT = 1;
-const MAX_GUESTS_COUNT = 10;
-
-const FIRST_WEEK_DAY = 1;
-const LAST_WEEK_DAY = 7;
 
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) {
@@ -22,7 +12,7 @@ export class TSVOfferGenerator implements OfferGenerator {
 
   private getRandomDate(): string {
     return dayjs()
-      .subtract(generateRandomValue(FIRST_WEEK_DAY, LAST_WEEK_DAY), 'day')
+      .subtract(generateRandomValue(WEEKS.FIRST, WEEKS.LAST), 'day')
       .toISOString();
   }
 
@@ -54,9 +44,9 @@ export class TSVOfferGenerator implements OfferGenerator {
     const images = getRandomItems(this.mockData.images).join(';');
     const isPremiumFlag = this.getRandomFlag();
     const houseType = getRandomItem(this.mockData.houseTypes);
-    const roomsCount = generateRandomValue(MIN_ROOM_COUNT, MAX_ROOM_COUNT).toString();
-    const guestsCount = generateRandomValue(MIN_GUESTS_COUNT, MAX_GUESTS_COUNT).toString();
-    const price = generateRandomValue(MIN_PRICE, MAX_PRICE).toString();
+    const roomsCount = generateRandomValue(ROOMS_COUNT_LENGTH.MIN, ROOMS_COUNT_LENGTH.MAX).toString();
+    const guestsCount = generateRandomValue(GUEST_COUNT_LENGTH.MIN, GUEST_COUNT_LENGTH.MAX).toString();
+    const price = generateRandomValue(RENT_PRICE.MIN, RENT_PRICE.MAX).toString();
     const facilities = getRandomItems(this.mockData.facilities).join(';');
     const user = this.getRandomUser();
     const coords = this.getRandomCoords();

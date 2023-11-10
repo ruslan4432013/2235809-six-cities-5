@@ -1,16 +1,16 @@
 import { Middleware } from './middleware.interface.js';
 import { NextFunction, Request, Response } from 'express';
 import multer, { diskStorage } from 'multer';
-import { extname } from 'node:path';
-import { randomUUID } from 'node:crypto';
+import { extension } from 'mime-types';
 import { HttpError } from '../errors/index.js';
 import { StatusCodes } from 'http-status-codes';
+import { nanoid } from 'nanoid';
 
 export class UploadFileMiddleware implements Middleware {
   constructor(
     private uploadDirectory: string,
     private fieldName: string,
-    private allowedExtensions?: string[],
+    private allowedMimeTypes?: string[],
     private fileCount?: number
   ) {
   }
@@ -19,16 +19,22 @@ export class UploadFileMiddleware implements Middleware {
     const storage = diskStorage({
       destination: this.uploadDirectory,
       filename: (_req, file, callback) => {
-        const fileExtension = extname(file.originalname);
+        const fileExtension = extension(file.mimetype);
+        if (!fileExtension) {
+          return callback(new HttpError(
+            StatusCodes.BAD_REQUEST,
+            'Incorrect extension',
+          ), '');
+        }
 
-        if (!this.allowedExtensions || this.allowedExtensions.includes(fileExtension)) {
-          const filename = randomUUID();
-          return callback(null, `${filename}${fileExtension}`);
+        if (!this.allowedMimeTypes || this.allowedMimeTypes.includes(fileExtension)) {
+          const filename = nanoid();
+          return callback(null, `${filename}.${fileExtension}`);
         }
 
         return callback(new HttpError(
           StatusCodes.BAD_REQUEST,
-          `Wrong file extension, allowed extensions: ${this.allowedExtensions}`,
+          `Wrong file extension, allowed extensions: ${this.allowedMimeTypes}`,
         ), '');
       }
     });

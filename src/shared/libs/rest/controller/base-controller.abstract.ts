@@ -15,11 +15,9 @@ import { isObject } from '../../../helpers/index.js';
 export abstract class BaseController implements Controller {
   public readonly router: Router = Router();
 
-  @inject(Component.PathTransformer)
-  private pathTransformer: PathTransformer;
-
+  @inject(Component.PathTransformer) private pathTransformer: PathTransformer;
   constructor(
-    protected readonly logger: Logger
+    protected readonly logger: Logger,
   ) {
   }
 
@@ -28,7 +26,7 @@ export abstract class BaseController implements Controller {
     const middlewareHandlers = route.middlewares?.map(
       (item) => asyncHandler(item.execute.bind(item))
     );
-    const allHandlers = middlewareHandlers ? [...middlewareHandlers, wrappedAsyncHandler] : wrappedAsyncHandler;
+    const allHandlers = middlewareHandlers ? [...middlewareHandlers, wrappedAsyncHandler] : [wrappedAsyncHandler];
     this.router[route.method](route.path, allHandlers);
     this.logger.info(`Route registered: ${route.method.toUpperCase()} ${route.path}`);
   }

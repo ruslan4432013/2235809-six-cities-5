@@ -1,17 +1,8 @@
-import {Facilities} from '../types/facilities.type.js';
+import { Facilities } from '../types/facilities.type.js';
 
 const isFacility = (value: unknown): value is Facilities =>
-  typeof value === 'string'
-  && [
-    Facilities.Breakfast,
-    Facilities.AirConditioning,
-    Facilities.LaptopFriendlyWorkspace,
-    Facilities.BabySeat,
-    Facilities.Washer,
-    Facilities.Towels,
-    Facilities.Fridge,
-    ''
-  ].includes(value);
+  typeof value === 'string' &&
+  Object.values(Facilities).includes(value as Facilities);
 
 const getFacility = (value: unknown): Facilities => {
   if (!isFacility(value)) {

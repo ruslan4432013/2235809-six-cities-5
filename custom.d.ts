@@ -6,16 +6,4 @@ declare module 'express-serve-static-core' {
   }
 }
 
-declare global {
-
-  interface String {
-    bold: string,
-    blue: string,
-    yellow: string,
-    red: string
-    green: string
-  }
-}
-
-
 export {};
