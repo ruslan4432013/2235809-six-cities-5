@@ -100,7 +100,6 @@ export class OfferController extends BaseController {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
-        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'preview'),
       ]
     });
     this.addRoute({
@@ -143,8 +142,7 @@ export class OfferController extends BaseController {
       );
     }
     const result = await this.offerService.create({ ...body, authorId: tokenPayload.id });
-    const offer = await this.offerService.findById(result.id);
-    this.created(res, fillDTO(OfferRdo, offer));
+    this.ok(res, fillDTO(OfferRdo, result));
   }
 
   public async show(
