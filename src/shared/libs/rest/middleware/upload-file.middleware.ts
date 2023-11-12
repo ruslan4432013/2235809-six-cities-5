@@ -26,7 +26,6 @@ export class UploadFileMiddleware implements Middleware {
             'Incorrect extension',
           ), '');
         }
-
         if (!this.allowedMimeTypes || this.allowedMimeTypes.includes(fileExtension)) {
           const filename = nanoid();
           return callback(null, `${filename}.${fileExtension}`);

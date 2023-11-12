@@ -22,7 +22,8 @@ import { AuthService } from '../auth/index.js';
 import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 import { FavoriteOfferRequest } from './types/favorite-offer-request.type.js';
 import { UploadUserAvatarRdo } from './rdo/upload-user-avatar.rdo.js';
-import { ALLOWED_AVATAR_MIMETYPES } from './user.constant.js';
+import { ALLOWED_AVATAR_EXTENSIONS } from './user.constant.js';
+import { OfferRdo, OfferService } from '../offer/index.js';
 
 
 @injectable()
@@ -30,6 +31,7 @@ export class UserController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) protected readonly userService: UserService,
+    @inject(Component.OfferService) protected readonly offerService: OfferService,
     @inject(Component.AuthService) private readonly authService: AuthService,
     @inject(Component.Config) private readonly configService: Config<RestSchema>,
   ) {
@@ -49,7 +51,7 @@ export class UserController extends BaseController {
       middlewares: [
         new ValidateObjectIdMiddleware('userId'),
         new DocumentExistsMiddleware(this.userService, 'User', 'userId', 'params'),
-        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar', ALLOWED_AVATAR_MIMETYPES)
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar', ALLOWED_AVATAR_EXTENSIONS)
       ]
     });
     this.addRoute({
@@ -120,8 +122,9 @@ export class UserController extends BaseController {
 
   public async addFavoriteOffer(req: FavoriteOfferRequest, res: Response) {
     const { tokenPayload, body: { offerId } } = req;
-    const user = await this.userService.addFavoriteOfferToUser(tokenPayload.id, offerId);
-    this.ok(res, fillDTO(UserRdo, user));
+    await this.userService.addFavoriteOfferToUser(tokenPayload.id, offerId);
+    const offer = await this.offerService.findById({ offerId, userId: tokenPayload.id });
+    this.ok(res, fillDTO(OfferRdo, { ...offer, isFavorite: true }));
   }
 
   public async removeFavoriteOffer(req: FavoriteOfferRequest, res: Response) {

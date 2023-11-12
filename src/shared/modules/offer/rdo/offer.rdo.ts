@@ -19,6 +19,9 @@ export class OfferRdo {
   public city: string;
 
   @Expose()
+  public preview: string;
+
+  @Expose()
   public images: string[];
 
   @Expose()
